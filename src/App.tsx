@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "./actions";
 
+import NewTodoInput from "./NewTodoInput";
+import { TodosState } from "./todosReducer";
 function App() {
+  const todos = useSelector<TodosState, TodosState["todos"]>(
+    (state) => state.todos
+  );
+  const dispatch = useDispatch();
+  const onAddTodo = (todo: string) => {
+    dispatch(addTodo(todo));
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NewTodoInput addTodo={onAddTodo} />
+      <hr />
+      <ul>
+        {todos.map((todo) => {
+          return <li key={todo}>{todo}</li>;
+        })}
+      </ul>
     </div>
   );
 }
